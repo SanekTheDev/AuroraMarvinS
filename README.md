@@ -51,31 +51,73 @@ The Tech Tree implementation in Aurora MarvinS is our own implementation and is 
 
 ### Overview
 
+The Overview tab provides a general view of issues to be fixed and general inforamtion.
+
 ![Aurora MarvinS Overview](screenshots/Overview.PNG)
 
 ### Charts
 
+#### Fuel
+
+The Fuel chart shows fuel-related data over time, allowing the player to track changes throughout the campaign.
+
 ![Aurora MarvinS Fuel Chart](screenshots/Fuel.PNG)
+
+#### Maintenance
+
+The Maintenance chart visualizes maintenance-related data recorded from the Aurora database.
 
 ![Aurora MarvinS Maintenance Chart](screenshots/Maintenance.PNG)
 
+#### Population
+
+The Population chart displays population data over the recorded history of the game.
+
 ![Aurora MarvinS Population Chart](screenshots/Pop.PNG)
+
+#### Wealth
+
+The Wealth chart visualizes wealth-related data over time.
 
 ![Aurora MarvinS Wealth Chart](screenshots/Wealth.PNG)
 
 ### Minerals
 
+#### Mineral Overview
+
+The Mineral Overview shows the available mineral data and their values across the recorded game history.
+
 ![Aurora MarvinS Mineral Overview](screenshots/MineralPlain.PNG)
 
+#### Mineral Trends
+
+The Mineral Trends view helps visualize whether selected mineral quantities are increasing or decreasing over time.
+
 ![Aurora MarvinS Mineral Trends](screenshots/MineralTrend.PNG)
+
+#### Custom Mineral Colors
+
+This screenshot demonstrates multiple mineral chart features used together, including mineral comparison, trend visualization and linear projection.
 
 ![Aurora MarvinS Custom Mineral Colors](screenshots/MineralCustom.PNG)
 
 ### Tech Tree
 
+#### Complete Tech Tree
+
+The redesigned Tech Tree organizes technologies and their dependencies from left to right, with color-coded connections between technologies and support for dependencies across different technology fields.
+
 ![Aurora MarvinS Tech Tree](screenshots/TechTree.PNG)
 
+#### Currently Researched Technologies
+
+This view highlights the technologies that are currently being researched by the player.
+
 ![Aurora MarvinS Currently Researched Technologies](screenshots/TechTreeCurrently.PNG)
+
+#### Unlocked Technologies
+
+This view filters the Tech Tree to show technologies that have been unlocked, making it easier to see the technologies currently available to the player.
 
 ![Aurora MarvinS Unlocked Technologies](screenshots/TechTreeUnlockedOnly.PNG)
 
