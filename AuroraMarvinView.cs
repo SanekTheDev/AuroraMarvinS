@@ -5,6 +5,7 @@ namespace AuroraMarvin
     using System.Data;
     using System.Drawing;
     using System.IO;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
@@ -12,9 +13,10 @@ namespace AuroraMarvin
 
     public partial class AuroraMarvinView : Form, IAuroraMarvinView
     {
-        private const string MARVINVERSION = "1.0.S (based on v2.2.0.0)";
+        private const string MARVINVERSION = "1.0.1 (based on v2.2.0.0)";
         private const string AURORAVERSION = "2.7.1";
-        private const string FORUMURL = "http://aurora2.pentarch.org/index.php?topic=12233.msg145907";
+        private const string GITHUBURL = "https://github.com/SanekTheDev/AuroraMarvinS";
+        private const string GUIDEURL = "https://github.com/SanekTheDev/AuroraMarvinS/blob/main/GUIDE.md";
         private readonly Version marvinVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         private IAuroraMarvinController controller;
         private bool showTechTree;
@@ -122,7 +124,7 @@ namespace AuroraMarvin
                 Font = new Font("Segoe UI", 10F),
                 Text =
                     "Aurora MarvinS\n" +
-                    "v1.0.S (based on v2.2.0.0) for Aurora 4X C# 2.7.1\n\n" +
+                    "v1.0.1 (based on v2.2.0.0) for Aurora 4X C# 2.7.1\n\n" +
                     "ABOUT THIS VERSION\n" +
                     "This version was updated by Sanek and is a modification/update of the original Aurora Marvin project, for Aurora 4X C# 2.7.1.\n\n" +
                     "VERSION NOTE\n" +
@@ -2340,18 +2342,126 @@ this.fuelChartRangeComboBox.SelectedIndex = 1;
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-$@"Aurora MarvinS v{MARVINVERSION} for Aurora 4x C# {AURORAVERSION}
+            using (Form helpDialog = new Form())
+            {
+                helpDialog.Text = "Aurora MarvinS";
+                helpDialog.StartPosition = FormStartPosition.CenterParent;
+                helpDialog.FormBorderStyle = FormBorderStyle.FixedDialog;
+                helpDialog.MaximizeBox = false;
+                helpDialog.MinimizeBox = false;
+                helpDialog.ShowInTaskbar = false;
+                helpDialog.ClientSize = new Size(520, 275);
 
-Questions, bugs, suggestions?
-Please head over to the Aurora 4x forum.",
-"AuroraMarvin",
-MessageBoxButtons.OK,
-MessageBoxIcon.Information,
-MessageBoxDefaultButton.Button1,
-0,
-FORUMURL,
-"Forum");
+                PictureBox icon = new PictureBox
+                {
+                    Size = new Size(32, 32),
+                    Location = new Point(22, 22),
+                    SizeMode = PictureBoxSizeMode.CenterImage,
+                    Image = SystemIcons.Information.ToBitmap()
+                };
+
+                Label versionLabel = new Label
+                {
+                    AutoSize = true,
+                    Location = new Point(70, 20),
+                    Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                    Text = $"Aurora MarvinS v{MARVINVERSION} for Aurora 4x C# {AURORAVERSION}"
+                };
+
+                Label questionsLabel = new Label
+                {
+                    AutoSize = true,
+                    Location = new Point(70, 58),
+                    Text = "Questions, bugs, or suggestions?"
+                };
+
+                Label guideLabel = new Label
+                {
+                    AutoSize = true,
+                    Location = new Point(70, 88),
+                    Text = "User Guide:"
+                };
+
+                LinkLabel guideLink = new LinkLabel
+                {
+                    AutoSize = true,
+                    Location = new Point(145, 88),
+                    Text = "GUIDE.md"
+                };
+                guideLink.LinkClicked += (s, args) => OpenExternalUrl(GUIDEURL);
+
+                Label githubLabel = new Label
+                {
+                    AutoSize = true,
+                    Location = new Point(70, 118),
+                    Text = "GitHub:"
+                };
+
+                LinkLabel githubLink = new LinkLabel
+                {
+                    AutoSize = true,
+                    Location = new Point(125, 118),
+                    Text = "AuroraMarvinS"
+                };
+                githubLink.LinkClicked += (s, args) => OpenExternalUrl(GITHUBURL);
+
+                Label supportLabel = new Label
+                {
+                    AutoSize = true,
+                    Location = new Point(70, 148),
+                    Text = "For support, please use the GitHub repository."
+                };
+
+                Button okButton = new Button
+                {
+                    Text = "OK",
+                    DialogResult = DialogResult.OK,
+                    Size = new Size(75, 23),
+                    Location = new Point(340, 230)
+                };
+
+                Button helpButton = new Button
+                {
+                    Text = "Open Guide",
+                    Size = new Size(90, 23),
+                    Location = new Point(425, 230)
+                };
+                helpButton.Click += (s, args) => OpenExternalUrl(GUIDEURL);
+
+                helpDialog.AcceptButton = okButton;
+                helpDialog.CancelButton = okButton;
+
+                helpDialog.Controls.AddRange(new Control[]
+                {
+                    icon, versionLabel, questionsLabel,
+                    guideLabel, guideLink,
+                    githubLabel, githubLink,
+                    supportLabel,
+                    okButton, helpButton
+                });
+
+                helpDialog.ShowDialog(this);
+            }
+        }
+
+        private static void OpenExternalUrl(string url)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Unable to open the requested link.\n\n" + ex.Message,
+                    "Aurora MarvinS",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void OverviewList_KeyDown(object sender, KeyEventArgs e)
@@ -2382,7 +2492,7 @@ FORUMURL,
             public ResourceColorDialog(Dictionary<string, Color> colors)
             {
                 this.workingColors = new Dictionary<string, Color>(colors, StringComparer.OrdinalIgnoreCase);
-                this.Text = "AuroraMarvinS (v1.0.0 (based on v2.2.0.0) for Aurora 4x C# 2.7.1)";
+                this.Text = "AuroraMarvinS (v1.0.1 (based on v2.2.0.0) for Aurora 4x C# 2.7.1)";
                 this.StartPosition = FormStartPosition.CenterParent;
                 this.MinimizeBox = false;
                 this.MaximizeBox = false;

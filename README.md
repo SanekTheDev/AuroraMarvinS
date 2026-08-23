@@ -10,9 +10,13 @@ The original author, **Scnaeg**, has given permission for the project to be cont
 
 ## Latest Release
 
-The latest stable release is **Aurora MarvinS v1.0.0**.
+The latest stable release is **Aurora MarvinS v1.0.1**.
 
 See the [Releases](../../releases) page to download the latest version.
+
+## User Guide
+
+New to Aurora MarvinS? Check out the [User Guide](GUIDE.md) for a step-by-step introduction to installing and using the application.
 
 ## Original project
 
