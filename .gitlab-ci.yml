@@ -1,0 +1,22 @@
+variables:
+  MSBUILD: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe'
+
+build:
+  tags:
+    - shared-windows
+    - windows
+    - windows-1809
+
+  only:
+    - tags
+
+  before_script:
+    - nuget restore AuroraMarvin.sln
+
+  script:
+    - mkdir ./AuroraMarvin
+    - '& "$env:MSBUILD" /p:Platform="AnyCPU" /p:Configuration="Release" /p:OutputPath="./AuroraMarvin/" AuroraMarvin.csproj'
+  
+  artifacts:
+    paths:
+      - "./AuroraMarvin"

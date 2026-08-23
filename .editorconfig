@@ -1,0 +1,16 @@
+﻿[*.cs]
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = silent
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = silent
+
+# SA1601: Partial elements should be documented
+dotnet_diagnostic.SA1601.severity = silent
+
+# IDE0003: Remove qualification
+dotnet_diagnostic.IDE0003.severity = silent
+
+# SA0001: XML comment analysis is disabled due to project configuration
+dotnet_diagnostic.SA0001.severity = silent
