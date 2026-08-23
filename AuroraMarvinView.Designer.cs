@@ -2920,7 +2920,7 @@ namespace AuroraMarvin
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AuroraMarvinView";
-            this.Text = "AuroraMarvinS";
+            this.Text = "AuroraMarvinS (v1.0.0 (based on v2.2.0.0) for Aurora 4x C# 2.7.1)";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);

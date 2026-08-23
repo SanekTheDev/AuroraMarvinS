@@ -50,6 +50,11 @@ namespace AuroraMarvin
         {
             public string Text { get; set; }
             public double GameTimeSeconds { get; set; }
+
+            public override string ToString()
+            {
+                return this.Text + "  (game time: " + this.GameTimeSeconds.ToString("0") + "s)";
+            }
         }
 
         public AuroraMarvinView()
@@ -58,8 +63,7 @@ namespace AuroraMarvin
 #if DEBUG
             this.Text += " [DEBUG]";
 #endif
-            this.Text += $" (v{MARVINVERSION} for Aurora 4x C# {AURORAVERSION})";
-            this.InitializeThemeSelector();
+                this.InitializeThemeSelector();
             this.InitializeInfoTab();
             this.InitializeChartInteractions();
             this.FormClosing += this.AuroraMarvinView_FormClosing;
@@ -520,8 +524,80 @@ namespace AuroraMarvin
 
         private void ClearChartEvents(Chart chart)
         {
+            // Kept as an internal helper for the event manager. The user-facing
+            // controls no longer use a generic "Clear" action for campaign events.
             if (this.chartEventMarkers.ContainsKey(chart)) this.chartEventMarkers[chart].Clear();
             this.RefreshChartForAnalysis(chart);
+        }
+
+        private void ManageChartEvents(Chart chart)
+        {
+            List<ChartEventMarker> markers;
+            if (!this.chartEventMarkers.TryGetValue(chart, out markers))
+            {
+                markers = new List<ChartEventMarker>();
+                this.chartEventMarkers[chart] = markers;
+            }
+
+            using (Form dialog = new Form
+            {
+                Text = "Manage Events",
+                StartPosition = FormStartPosition.CenterParent,
+                Size = new Size(430, 360),
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false
+            })
+            {
+                Label info = new Label
+                {
+                    Dock = DockStyle.Top,
+                    Height = 42,
+                    Padding = new Padding(8, 8, 8, 4),
+                    Text = "Select campaign events to remove. Events are kept until you explicitly delete them."
+                };
+
+                ListBox list = new ListBox
+                {
+                    Dock = DockStyle.Fill,
+                    SelectionMode = SelectionMode.MultiExtended
+                };
+
+                foreach (ChartEventMarker marker in markers)
+                {
+                    list.Items.Add(marker);
+                }
+
+                FlowLayoutPanel buttons = new FlowLayoutPanel
+                {
+                    Dock = DockStyle.Bottom,
+                    Height = 42,
+                    FlowDirection = FlowDirection.RightToLeft,
+                    Padding = new Padding(6)
+                };
+
+                Button close = new Button { Text = "Close", Width = 80, Height = 25 };
+                Button delete = new Button { Text = "Delete Selected", Width = 120, Height = 25 };
+
+                close.Click += (sender, e) => dialog.Close();
+                delete.Click += (sender, e) =>
+                {
+                    List<ChartEventMarker> selected = list.SelectedItems.Cast<ChartEventMarker>().ToList();
+                    foreach (ChartEventMarker marker in selected)
+                    {
+                        markers.Remove(marker);
+                        list.Items.Remove(marker);
+                    }
+                    this.RefreshChartForAnalysis(chart);
+                };
+
+                buttons.Controls.Add(close);
+                buttons.Controls.Add(delete);
+                dialog.Controls.Add(list);
+                dialog.Controls.Add(buttons);
+                dialog.Controls.Add(info);
+                dialog.ShowDialog(this);
+            }
         }
 
         private void ApplyChartEventMarkers(Chart chart)
@@ -1322,6 +1398,26 @@ namespace AuroraMarvin
             return res;
         }
 
+        private void ClearMineralCompare(Chart chart)
+        {
+            this.customMineralSelections.Remove(chart);
+
+            ComboBox display = chart == this.chart1
+                ? this.mineralChartDisplayComboBox
+                : this.populationMineralChartDisplayComboBox;
+
+            if (display != null)
+            {
+                int allMineralsIndex = display.Items.IndexOf("All minerals");
+                if (allMineralsIndex >= 0)
+                {
+                    display.SelectedIndex = allMineralsIndex;
+                }
+            }
+
+            this.RefreshChartForAnalysis(chart);
+        }
+
         private void OpenMineralCompareDialog(Chart chart)
         {
             string[] minerals = { "Duranium", "Neutronium", "Corbomite", "Tritanium", "Boronide", "Mercassium", "Vendarite", "Sorium", "Uridium", "Corundium", "Gallicite" };
@@ -1460,17 +1556,7 @@ namespace AuroraMarvin
             this.CreateChartAnalysisControls(this.tabPage9, this.chart4, 8, 31);
             this.CreateChartAnalysisControls(this.tabPage11, this.chart5, 8, 31);
             this.CreateChartAnalysisControls(this.tabPage17, this.chart6, 8, 31);
-
-            // Compare belongs on the second row so it never overlaps Display/X-axis controls.
-            Button mineralCompareButton = new Button { Text = "Compare...", Location = new Point(690, 30), Size = new Size(78, 23), Name = "mineralCompareButton" };
-            mineralCompareButton.Click += (s, e) => this.OpenMineralCompareDialog(this.chart1);
-            this.tabPage15.Controls.Add(mineralCompareButton);
-
-            Button populationMineralCompareButton = new Button { Text = "Compare...", Location = new Point(690, 30), Size = new Size(78, 23), Name = "populationMineralCompareButton" };
-            populationMineralCompareButton.Click += (s, e) => this.OpenMineralCompareDialog(this.chart6);
-            this.tabPage17.Controls.Add(populationMineralCompareButton);
-
-            this.fuelChartRangeComboBox.SelectedIndex = 1;
+this.fuelChartRangeComboBox.SelectedIndex = 1;
             this.maintenanceChartRangeComboBox.SelectedIndex = 1;
             this.populationChartRangeComboBox.SelectedIndex = 1;
             this.wealthChartRangeComboBox.SelectedIndex = 1;
@@ -1563,13 +1649,44 @@ namespace AuroraMarvin
 
             Button resetZoom = new Button { Text = "Reset zoom", Location = new Point(x + 425, y - 1), Size = new Size(78, 23), Name = page.Name + "ResetZoomButton" };
             resetZoom.Click += (s, e) => this.ResetChartZoom(chart);
-            Button export = new Button { Text = "Export", Location = new Point(x + 508, y - 1), Size = new Size(60, 23), Name = page.Name + "ExportButton" };
+
+            Button export = new Button { Text = "Export", Location = new Point(x + 509, y - 1), Size = new Size(60, 23), Name = page.Name + "ExportButton" };
             export.Click += (s, e) => this.ExportChart(chart);
-            Button eventButton = new Button { Text = "Event", Location = new Point(x + 573, y - 1), Size = new Size(55, 23), Name = page.Name + "EventButton" };
+
+            Button eventButton = new Button { Text = "Add Event", Location = new Point(x + 575, y - 1), Size = new Size(70, 23), Name = page.Name + "EventButton" };
             eventButton.Click += (s, e) => this.AddChartEvent(chart);
-            Button clearEventButton = new Button { Text = "Clear", Location = new Point(x + 633, y - 1), Size = new Size(50, 23), Name = page.Name + "ClearEventButton" };
-            clearEventButton.Click += (s, e) => this.ClearChartEvents(chart);
-            page.Controls.Add(resetZoom); page.Controls.Add(export); page.Controls.Add(eventButton); page.Controls.Add(clearEventButton);
+
+            Button manageEventsButton = new Button { Text = "Manage Events...", Location = new Point(x + 651, y - 1), Size = new Size(105, 23), Name = page.Name + "ManageEventsButton" };
+            manageEventsButton.Click += (s, e) => this.ManageChartEvents(chart);
+
+            page.Controls.Add(resetZoom);
+            page.Controls.Add(export);
+            page.Controls.Add(eventButton);
+            page.Controls.Add(manageEventsButton);
+
+            if (chart == this.chart1 || chart == this.chart6)
+            {
+                Button compareMineralsButton = new Button
+                {
+                    Text = "Compare Minerals...",
+                    Location = new Point(x + 762, y - 1),
+                    Size = new Size(125, 23),
+                    Name = page.Name + "CompareMineralsButton"
+                };
+                compareMineralsButton.Click += (s, e) => this.OpenMineralCompareDialog(chart);
+
+                Button clearCompareButton = new Button
+                {
+                    Text = "Clear Compare",
+                    Location = new Point(x + 893, y - 1),
+                    Size = new Size(90, 23),
+                    Name = page.Name + "ClearCompareButton"
+                };
+                clearCompareButton.Click += (s, e) => this.ClearMineralCompare(chart);
+
+                page.Controls.Add(compareMineralsButton);
+                page.Controls.Add(clearCompareButton);
+            }
             this.chartTrendComboBoxes[chart] = trendCombo;
             this.chartOverlayComboBoxes[chart] = overlayCombo;
 
@@ -1669,9 +1786,28 @@ namespace AuroraMarvin
             }
             if (double.IsNaN(first) || double.IsNaN(last)) return " →";
             double delta = last - first;
-            double tolerance = Math.Max(0.000001, Math.Abs(first) * 0.0001);
-            if (delta > tolerance) return " ↑";
-            if (delta < -tolerance) return " ↓";
+            // The legend reflects the direction of the most recent interval,
+            // matching the last coloured segment on the chart.
+            double previous = double.NaN;
+            for (int i = series.Points.Count - 2; i >= 0; i--)
+            {
+                if (series.Points[i].YValues.Length > 0 && !double.IsNaN(series.Points[i].YValues[0]) && !double.IsInfinity(series.Points[i].YValues[0]))
+                {
+                    previous = series.Points[i].YValues[0];
+                    break;
+                }
+            }
+            if (!double.IsNaN(previous) && !double.IsNaN(last))
+            {
+                double latestDelta = last - previous;
+                double tolerance = Math.Max(0.000001, Math.Max(Math.Abs(previous), Math.Abs(last)) * 0.0001);
+                if (latestDelta > tolerance) return " ↑";
+                if (latestDelta < -tolerance) return " ↓";
+                return " →";
+            }
+            double toleranceFallback = Math.Max(0.000001, Math.Abs(first) * 0.0001);
+            if (delta > toleranceFallback) return " ↑";
+            if (delta < -toleranceFallback) return " ↓";
             return " →";
         }
 
@@ -1951,6 +2087,9 @@ namespace AuroraMarvin
             area.AxisX.Maximum = double.NaN;
             area.AxisX.Interval = 0;
             area.AxisX.LabelStyle.Enabled = true;
+            // Game-time labels show only the save/data-point number.
+            area.AxisX.LabelStyle.Font = new Font("Segoe UI", 9F);
+            area.AxisX.LabelStyle.Angle = 0;
             area.AxisX.IsMarginVisible = true;
 
             if (!gameTime)
@@ -1970,20 +2109,13 @@ namespace AuroraMarvin
             }
             else
             {
-                area.AxisX.Title = "Game time";
-                area.AxisX.LabelStyle.Enabled = true;
-                area.AxisX.LabelStyle.Format = "";
-
-                int count = chartData.Rows.Count;
-                int step = count <= 20 ? 1 : Math.Max(1, (int)Math.Ceiling(count / 12.0));
-                double halfWidth = this.GetGameTimeLabelHalfWidth(chartData);
-                for (int i = 0; i < count; i += step)
-                {
-                    DataRow row = chartData.Rows[i];
-                    double x = Convert.ToDouble(row["GameTimeSeconds"]);
-                    string label = row["DataPointIndex"] + "\n" + ((DateTime)row["DateTime"]).ToString("dd/MM/yyyy");
-                    area.AxisX.CustomLabels.Add(new CustomLabel(x - halfWidth, x + halfWidth, label, 0, LabelMarkStyle.None));
-                }
+                // Game Time remains the real X-axis used for plotting, but the
+                // axis labels are temporarily hidden because the save-number
+                // labels are not displaying reliably at the current scale.
+                area.AxisX.Title = "";
+                area.AxisX.LabelStyle.Enabled = false;
+                area.AxisX.MajorTickMark.Enabled = false;
+                area.AxisX.MinorTickMark.Enabled = false;
             }
 
             if (chartData.Rows.Count > 0)
@@ -2125,7 +2257,18 @@ namespace AuroraMarvin
             else if (sender == this.maintenanceChartXAxisComboBox && this.resourceChartData != null) this.ApplyStandardChart(this.chart3, this.resourceChartData, this.maintenanceChartRangeComboBox, "Maintenance supplies");
             else if (sender == this.populationChartXAxisComboBox && this.resourceChartData != null) this.ApplyStandardChart(this.chart4, this.resourceChartData, this.populationChartRangeComboBox, "Population");
             else if (sender == this.wealthChartXAxisComboBox && this.wealthChartData != null) this.ApplyStandardChart(this.chart5, this.wealthChartData, this.wealthChartRangeComboBox, "Wealth");
-            else if (sender == this.populationMineralChartXAxisComboBox) this.ApplyPopulationMineralChart();
+            else if (sender == this.populationMineralChartXAxisComboBox) this.ApplyPopulationMineralChart();            Chart changedChart = null;
+            if (sender == this.mineralChartXAxisComboBox) changedChart = this.chart1;
+            else if (sender == this.fuelChartXAxisComboBox) changedChart = this.chart2;
+            else if (sender == this.maintenanceChartXAxisComboBox) changedChart = this.chart3;
+            else if (sender == this.populationChartXAxisComboBox) changedChart = this.chart4;
+            else if (sender == this.wealthChartXAxisComboBox) changedChart = this.chart5;
+            else if (sender == this.populationMineralChartXAxisComboBox) changedChart = this.chart6;
+
+            if (changedChart != null)
+            {
+                this.ResetChartZoom(changedChart);
+            }
         }
 
         private void ApplyPopulationMineralChart()
@@ -2239,7 +2382,7 @@ FORUMURL,
             public ResourceColorDialog(Dictionary<string, Color> colors)
             {
                 this.workingColors = new Dictionary<string, Color>(colors, StringComparer.OrdinalIgnoreCase);
-                this.Text = "Customize Resource Colors";
+                this.Text = "AuroraMarvinS (v1.0.0 (based on v2.2.0.0) for Aurora 4x C# 2.7.1)";
                 this.StartPosition = FormStartPosition.CenterParent;
                 this.MinimizeBox = false;
                 this.MaximizeBox = false;
