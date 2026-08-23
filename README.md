@@ -47,6 +47,38 @@ The Tech Tree implementation in Aurora MarvinS is our own implementation and is 
 - Cross-field Tech Tree dependencies
 - Automatic filtering of system/start technologies, BioEnergy and Swarm technologies from the displayed Tech Tree
 
+## Screenshots
+
+### Overview
+
+![Aurora MarvinS Overview](screenshots/Overview.PNG)
+
+### Charts
+
+![Aurora MarvinS Fuel Chart](screenshots/Fuel.PNG)
+
+![Aurora MarvinS Maintenance Chart](screenshots/Maintenance.PNG)
+
+![Aurora MarvinS Population Chart](screenshots/Pop.PNG)
+
+![Aurora MarvinS Wealth Chart](screenshots/Wealth.PNG)
+
+### Minerals
+
+![Aurora MarvinS Mineral Overview](screenshots/MineralPlain.PNG)
+
+![Aurora MarvinS Mineral Trends](screenshots/MineralTrend.PNG)
+
+![Aurora MarvinS Custom Mineral Colors](screenshots/MineralCustom.PNG)
+
+### Tech Tree
+
+![Aurora MarvinS Tech Tree](screenshots/TechTree.PNG)
+
+![Aurora MarvinS Currently Researched Technologies](screenshots/TechTreeCurrently.PNG)
+
+![Aurora MarvinS Unlocked Technologies](screenshots/TechTreeUnlockedOnly.PNG)
+
 ## Building
 
 Aurora MarvinS is a C#/.NET Framework project intended to be built with Visual Studio 2022.
