@@ -1,12 +1,18 @@
 # Aurora MarvinS
 
-Aurora MarvinS is an unofficial continuation and modification of the original **Aurora Marvin** project, updated for **Aurora 4X C# 2.7.1**.
+Aurora MarvinS is an unofficial continuation and modification of the original **Aurora Marvin** project, updated for **Aurora 4X C# 2.7.1** with new features and changes.
 
 ## About
 
 This version was updated by **Sanek**. It builds on the original Aurora Marvin project and adds updated charting, visualization, customization and Tech Tree functionality while retaining the original project's purpose of reading and presenting Aurora data.
 
-The original author, **Scnaeg**, has given permission for the project to be continued and published as a free and open-source project and agreed to the plan to publish Aurora MarvinS under the GNU GPL v3.0. Aurora MarvinS is an unofficial continuation/modification and is not the official Aurora 4X application.
+The original author, **Scnaeg**, has given permission for the project to be continued and published as a free and open-source project and agreed to the plan to publish Aurora MarvinS under the GNU GPL v3.0.
+
+## Latest Release
+
+The latest stable release is **Aurora MarvinS v1.0.0**.
+
+See the [Releases](../../releases) page to download the latest version.
 
 ## Original project
 
@@ -16,15 +22,13 @@ Original repository:
 
 https://gitlab.com/Scnaeg/auroramarvin
 
-Aurora MarvinS is not the official Aurora 4X application and is not affiliated with or endorsed by the Aurora 4X developer.
-
 ## Tech Tree inspiration
 
 The redesigned Tech Tree layout implementation is inspired by the layout shared in:
 
 https://www.reddit.com/r/aurora/comments/1vrzho8/complete_tech_tree_for_aurora_271/
 
-The Tech Tree implementation in Aurora MarvinS is our own implementation and is intended as an easier-to-read visualization of Aurora research dependencies.
+The Tech Tree implementation in Aurora MarvinS is an independent implementation and is intended to provide an easier-to-read visualization of Aurora research dependencies.
 
 ## Current features
 
@@ -51,7 +55,7 @@ The Tech Tree implementation in Aurora MarvinS is our own implementation and is 
 
 ### Overview
 
-The Overview tab provides a general view of issues to be fixed and general inforamtion.
+The Overview tab provides a general view of issues to be fixed and general information useful for players.
 
 ![Aurora MarvinS Overview](screenshots/Overview.PNG)
 
@@ -134,7 +138,7 @@ Aurora MarvinS is a C#/.NET Framework project intended to be built with Visual S
 
 The Tech Tree filters and visualization changes affect only what Aurora MarvinS displays. They do **not** remove or modify those technologies in the Aurora database.
 
-Aurora MarvinS is an unofficial project and should not be confused with the official Aurora 4X application.
+Aurora MarvinS is an unofficial project/modification and is not affiliated with the official Aurora 4X application. Please do not report Aurora MarvinS bugs to the official Aurora 4X developer.
 
 ## Credits
 
