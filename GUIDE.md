@@ -11,6 +11,7 @@ This guide explains how to install, set up and use Aurora MarvinS with your Auro
 - [Getting Started](#getting-started)
 - [Installation](#installation)
 - [Loading Your Aurora Database](#loading-your-aurora-database)
+- [Refreshing the Game/Save List](#refreshing-the-gamesave-list)
 - [Charts](#charts)
   - [Chart Navigation](#chart-navigation)
   - [X-Axis](#x-axis)
@@ -102,6 +103,30 @@ Aurora MarvinS reads the information stored in this database and uses it to popu
 > **Important:** Aurora MarvinS is a visualization and analysis tool. It does not modify or delete technologies or other data in your Aurora database.
 
 ---
+
+
+# Refreshing the Game/Save List
+
+Aurora MarvinS v1.1.0 includes a **Refresh Saves** button next to **Select Database File**.
+
+Use **Refresh Saves** when you create or remove a game/save in Aurora while Aurora MarvinS is already open.
+
+### Creating a new game/save
+
+1. Create the new game/save in Aurora 4X.
+2. Save the game so the change is written to the Aurora database.
+3. In Aurora MarvinS, click **Refresh Saves**.
+4. The new game should appear in **Select Game**.
+
+### Removing a game/save
+
+1. Remove the game/save in Aurora 4X.
+2. In Aurora MarvinS, click **Refresh Saves**.
+3. The removed game should disappear from **Select Game**.
+
+You do not need to close and reopen Aurora MarvinS or use **Select Database File** again just to refresh the list.
+
+> **Note:** Refresh Saves refreshes the available game/save list. It does not replace the normal Aurora save process; Aurora must still write the change to its database first.
 
 # Charts
 

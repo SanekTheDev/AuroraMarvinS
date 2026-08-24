@@ -70,6 +70,7 @@ namespace AuroraMarvin
             System.Windows.Forms.DataVisualization.Charting.Series series26 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AuroraMarvinView));
             this.gameSelector = new System.Windows.Forms.ComboBox();
+            this.refreshSavesButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.raceSelector = new System.Windows.Forms.ComboBox();
@@ -349,8 +350,15 @@ namespace AuroraMarvin
             // gameSelector
             // 
             this.gameSelector.FormattingEnabled = true;
-            this.gameSelector.Location = new System.Drawing.Point(211, 29);
+            this.gameSelector.Location = new System.Drawing.Point(322, 29);
             this.gameSelector.Name = "gameSelector";
+            this.refreshSavesButton.Location = new System.Drawing.Point(135, 29);
+            this.refreshSavesButton.Name = "refreshSavesButton";
+            this.refreshSavesButton.Size = new System.Drawing.Size(105, 21);
+            this.refreshSavesButton.TabIndex = 8;
+            this.refreshSavesButton.Text = "Refresh Saves";
+            this.refreshSavesButton.UseVisualStyleBackColor = true;
+            this.refreshSavesButton.Click += new System.EventHandler(this.RefreshSavesButton_Click);
             this.gameSelector.Size = new System.Drawing.Size(121, 21);
             this.gameSelector.TabIndex = 7;
             this.gameSelector.SelectedIndexChanged += new System.EventHandler(this.GameSelector_SelectedIndexChanged);
@@ -358,7 +366,7 @@ namespace AuroraMarvin
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(137, 32);
+            this.label3.Location = new System.Drawing.Point(248, 32);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 13);
             this.label3.TabIndex = 8;
@@ -367,7 +375,7 @@ namespace AuroraMarvin
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(338, 32);
+            this.label1.Location = new System.Drawing.Point(449, 32);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 9;
@@ -376,7 +384,7 @@ namespace AuroraMarvin
             // raceSelector
             // 
             this.raceSelector.FormattingEnabled = true;
-            this.raceSelector.Location = new System.Drawing.Point(410, 29);
+            this.raceSelector.Location = new System.Drawing.Point(521, 29);
             this.raceSelector.Name = "raceSelector";
             this.raceSelector.Size = new System.Drawing.Size(121, 21);
             this.raceSelector.TabIndex = 10;
@@ -2916,11 +2924,12 @@ namespace AuroraMarvin
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.gameSelector);
+            this.Controls.Add(this.refreshSavesButton);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AuroraMarvinView";
-            this.Text = "AuroraMarvinS (v1.0.1 (based on v2.2.0.0) for Aurora 4x C# 2.7.1)";
+            this.Text = "AuroraMarvinS (v1.1.0 (based on v2.2.0.0) for Aurora 4x C# 2.7.1)";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -2970,6 +2979,7 @@ namespace AuroraMarvin
 
         #endregion
         private System.Windows.Forms.ComboBox gameSelector;
+        private System.Windows.Forms.Button refreshSavesButton;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox raceSelector;

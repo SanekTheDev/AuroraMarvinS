@@ -1,4 +1,4 @@
-﻿namespace AuroraMarvin
+namespace AuroraMarvin
 {
     using System;
     using System.Data;
@@ -236,6 +236,14 @@
 
         public bool CheckForChangedDatabase()
         {
+            // The selected Aurora save can be deleted while MarvinS is watching it.
+            // File.GetLastWriteTime() does not provide a valid database state in that
+            // situation, so do not try to reload data from a file that no longer exists.
+            if (string.IsNullOrEmpty(this.Dbfile) || !File.Exists(this.Dbfile))
+            {
+                return false;
+            }
+
             DateTime lastWriteTime = File.GetLastWriteTime(this.Dbfile);
             if (lastWriteTime != this.lastRead)
             {
