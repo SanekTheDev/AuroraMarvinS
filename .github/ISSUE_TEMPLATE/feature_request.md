@@ -1,3 +1,11 @@
+---
+name: Feature Request
+about: Suggest a new feature or improvement for Aurora MarvinS.
+title: "[FEATURE] "
+labels: feature
+assignees: ''
+---
+
 ## Feature
 <!-- What feature or improvement would you like to see added? -->
 
