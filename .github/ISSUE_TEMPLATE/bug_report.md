@@ -1,3 +1,11 @@
+---
+name: Bug Report
+about: Report a bug or unexpected behavior in Aurora MarvinS.
+title: "[BUG] "
+labels: bug
+assignees: ''
+---
+
 ## Aurora MarvinS version
 <!-- Which version of Aurora MarvinS are you using? Example: v1.0.1 -->
 
