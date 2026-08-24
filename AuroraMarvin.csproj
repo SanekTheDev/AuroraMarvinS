@@ -123,26 +123,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuroraMarvinController.cs" />
-    <Compile Include="AuroraMarvinModel.cs" />
-    <Compile Include="AuroraDatabase.cs" />
-    <Compile Include="Aurora\GroundMineralSurvey.cs" />
-    <Compile Include="MarvinDatabase.cs" />
-    <Compile Include="DataAccess.cs" />
-    <Compile Include="IAuroraMarvinModel.cs" />
-    <Compile Include="IAuroraMarvinController.cs" />
-    <Compile Include="IAuroraMarvinView.cs" />
-    <Compile Include="AuroraMarvinView.cs">
+    <Compile Include="Application\AuroraMarvinController.cs" />
+    <Compile Include="Application\AuroraMarvinModel.cs" />
+    <Compile Include="Application\IAuroraMarvinModel.cs" />
+    <Compile Include="Application\IAuroraMarvinController.cs" />
+    <Compile Include="Infrastructure\Data\AuroraDatabase.cs" />
+    <Compile Include="Infrastructure\Data\MarvinDatabase.cs" />
+    <Compile Include="Infrastructure\Data\Generated\DataAccess.cs" />
+    <Compile Include="Domain\Aurora\GroundMineralSurvey.cs" />
+    <Compile Include="Presentation\IAuroraMarvinView.cs" />
+    <Compile Include="Presentation\AuroraMarvinView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AuroraMarvinView.Designer.cs">
+    <Compile Include="Presentation\AuroraMarvinView.Designer.cs">
       <DependentUpon>AuroraMarvinView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ThemeManager.cs" />
-    <Compile Include="TechTreeControl.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Presentation\Theming\ThemeManager.cs" />
+    <Compile Include="Presentation\Controls\TechTreeControl.cs" />
+    <Compile Include="Application\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AuroraMarvinView.resx">
+    <EmbeddedResource Include="Presentation\AuroraMarvinView.resx">
       <DependentUpon>AuroraMarvinView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
