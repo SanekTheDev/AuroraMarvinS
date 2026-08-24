@@ -10,7 +10,7 @@ The original author, **Scnaeg**, has given permission for the project to be cont
 
 ## Latest Release
 
-The latest stable release is **Aurora MarvinS v1.0.1**.
+The latest stable release is **Aurora MarvinS v1.1.0**.
 
 See the [Releases](../../releases) page to download the latest version.
 
@@ -37,6 +37,8 @@ The Tech Tree implementation in Aurora MarvinS is an independent implementation 
 ## Current features
 
 - Aurora 4X C# 2.7.1 compatibility
+- Refresh Saves button for updating the available game/save list without reloading the database
+- Improved handling when a game/save is removed while Aurora MarvinS is open
 - Resource and population charts
 - Relative and Game Time chart axes
 - Historical chart ranges
@@ -128,6 +130,13 @@ This view highlights the technologies that are currently being researched by the
 This view filters the Tech Tree to show technologies that have been unlocked, making it easier to see the technologies currently available to the player.
 
 ![Aurora MarvinS Unlocked Technologies](screenshots/TechTreeUnlockedOnly.PNG)
+
+
+## v1.1.0
+
+Aurora MarvinS v1.1.0 adds a **Refresh Saves** button next to the database selector. After creating or removing a game/save in Aurora 4X, use this button to refresh the available games in the **Select Game** list without closing and reopening the database in Aurora MarvinS.
+
+This release also fixes an issue where removing the currently selected game/save while Aurora MarvinS was using the database could cause an unhandled error and leave the application unable to load the affected state correctly.
 
 ## Building
 

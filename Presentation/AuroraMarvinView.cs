@@ -13,7 +13,7 @@ namespace AuroraMarvin
 
     public partial class AuroraMarvinView : Form, IAuroraMarvinView
     {
-        private const string MARVINVERSION = "1.0.1 (based on v2.2.0.0)";
+        private const string MARVINVERSION = "1.1.0 (based on v2.2.0.0)";
         private const string AURORAVERSION = "2.7.1";
         private const string GITHUBURL = "https://github.com/SanekTheDev/AuroraMarvinS";
         private const string GUIDEURL = "https://github.com/SanekTheDev/AuroraMarvinS/blob/main/GUIDE.md";
@@ -124,7 +124,7 @@ namespace AuroraMarvin
                 Font = new Font("Segoe UI", 10F),
                 Text =
                     "Aurora MarvinS\n" +
-                    "v1.0.1 (based on v2.2.0.0) for Aurora 4X C# 2.7.1\n\n" +
+                    "v1.1.0 (based on v2.2.0.0) for Aurora 4X C# 2.7.1\n\n" +
                     "ABOUT THIS VERSION\n" +
                     "This version was updated by Sanek and is a modification/update of the original Aurora Marvin project, for Aurora 4X C# 2.7.1.\n\n" +
                     "VERSION NOTE\n" +
@@ -725,8 +725,21 @@ namespace AuroraMarvin
             this.gameSelector.DisplayMember = "GameName";
             this.gameSelector.ValueMember = "GameID";
             this.gameSelector.DataSource = games;
+
             DataRow[] lastGame = games.Select("LastViewed = 1");
-            this.gameSelector.SelectedValue = lastGame[0]["GameID"];
+
+            if (lastGame.Length > 0)
+            {
+                this.gameSelector.SelectedValue = lastGame[0]["GameID"];
+            }
+            else if (games.Rows.Count > 0)
+            {
+                this.gameSelector.SelectedIndex = 0;
+            }
+            else
+            {
+                this.gameSelector.SelectedIndex = -1;
+            }
         }
 
         public void SetRaces(DataTable races)
@@ -981,6 +994,25 @@ namespace AuroraMarvin
             this.controller.GetData();
         }
 
+        private void RefreshSavesButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Re-read the game list from the currently loaded Aurora database.
+                // GetGames() already updates the game selector through the existing
+                // controller/view flow.
+                this.controller.GetGames();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Unable to refresh the game list.\n\n" + ex.Message,
+                    "Refresh Saves",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
         private void FileButton_Click(object sender, EventArgs e)
         {
             DialogResult result = this.openFileDialog1.ShowDialog();
@@ -999,7 +1031,6 @@ namespace AuroraMarvin
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default;
 
                 this.fileSystemWatcher1.Path = Path.GetDirectoryName(dbfile);
-                this.fileSystemWatcher1.Changed += this.FileSystemWatcher1_Changed;
                 this.fileSystemWatcher1.NotifyFilter = NotifyFilters.LastWrite;
                 this.fileSystemWatcher1.Filter = "AuroraDB.db";
             }
@@ -1066,6 +1097,15 @@ namespace AuroraMarvin
             try
             {
                 this.fileSystemWatcher1.EnableRaisingEvents = false;
+
+                // Aurora's database may be deleted or temporarily unavailable while
+                // the watcher is handling a filesystem event. Do not try to read it
+                // until the selected database exists again.
+                if (!File.Exists(e.FullPath))
+                {
+                    return;
+                }
+
                 if (this.controller.CheckForChangedDatabase())
                 {
                     Console.WriteLine("Database {0} changed. Reloading data.", e.Name);
@@ -1079,6 +1119,14 @@ namespace AuroraMarvin
                     this.RenderTechTree();
                     System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default;
                 }
+            }
+            catch (Exception ex)
+            {
+                // A filesystem event can occur while Aurora is replacing/updating the
+                // database. Do not let a transient database read/parse error terminate
+                // the entire application. The next valid save can be processed normally.
+                Console.WriteLine("Unable to reload Aurora database after filesystem change: {0}", ex.Message);
+                System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default;
             }
             finally
             {
@@ -2492,7 +2540,7 @@ this.fuelChartRangeComboBox.SelectedIndex = 1;
             public ResourceColorDialog(Dictionary<string, Color> colors)
             {
                 this.workingColors = new Dictionary<string, Color>(colors, StringComparer.OrdinalIgnoreCase);
-                this.Text = "AuroraMarvinS (v1.0.1 (based on v2.2.0.0) for Aurora 4x C# 2.7.1)";
+                this.Text = "AuroraMarvinS (v1.1.0 (based on v2.2.0.0) for Aurora 4x C# 2.7.1)";
                 this.StartPosition = FormStartPosition.CenterParent;
                 this.MinimizeBox = false;
                 this.MaximizeBox = false;

@@ -7,7 +7,7 @@ assignees: ''
 ---
 
 ## Aurora MarvinS version
-<!-- Which version of Aurora MarvinS are you using? Example: v1.0.1 -->
+<!-- Which version of Aurora MarvinS are you using? Example: v1.1.0 -->
 
 ## Aurora 4X version
 <!-- Which version of Aurora 4X are you using? Example: Aurora 4X C# 2.7.1 -->

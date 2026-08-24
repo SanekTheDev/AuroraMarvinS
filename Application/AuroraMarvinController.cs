@@ -448,18 +448,44 @@ namespace AuroraMarvin
         private List<string> GetIdleOrbitalMiners()
         {
             DataTable diameter = this.model.GetOrbitalMiningDiameter();
-            double maxdiameter = double.Parse(diameter.Rows[0]["MaxDiameter"].ToString());
-            DataTable ships = this.model.GetIdleOrbitalMiners();
             List<string> msg = new List<string>();
+
+            // A game may not have a Maximum Orbital Mining Diameter tech yet,
+            // or the selected game may have just been deleted. In that case
+            // the MAX() query returns a NULL value. Do not let that propagate
+            // into double.Parse(), which would crash the application.
+            if (diameter.Rows.Count == 0 || diameter.Rows[0]["MaxDiameter"] == DBNull.Value)
+            {
+                return msg;
+            }
+
+            double maxdiameter;
+            if (!double.TryParse(diameter.Rows[0]["MaxDiameter"].ToString(), out maxdiameter))
+            {
+                return msg;
+            }
+
+            DataTable ships = this.model.GetIdleOrbitalMiners();
             foreach (DataRow row in ships.Rows)
             {
-                int s = int.Parse(row["Component"].ToString()) + 64;
-                char sol = Convert.ToChar(s);
-                int p = int.Parse(row["PlanetNumber"].ToString());
+                int s;
+                int p;
+                double d;
+                double minerals;
+
+                if (!int.TryParse(row["Component"].ToString(), out s)
+                    || !int.TryParse(row["PlanetNumber"].ToString(), out p)
+                    || !double.TryParse(row["Radius"].ToString(), out d)
+                    || !double.TryParse(row["Minerals"].ToString(), out minerals))
+                {
+                    continue;
+                }
+
+                char sol = Convert.ToChar(s + 64);
+                d *= 2;
 
                 bool show = false;
                 string m = string.Empty;
-                double d = double.Parse(row["Radius"].ToString()) * 2;
 
                 if (d > maxdiameter)
                 {
@@ -467,7 +493,7 @@ namespace AuroraMarvin
                     m = "Body diameter " + d.ToString() + "km is larger then maximum orbital mining diameter: " + maxdiameter.ToString() + "km";
                 }
 
-                if (double.Parse(row["Minerals"].ToString()) == 0.0)
+                if (minerals == 0.0)
                 {
                     show = true;
                     m = "No minerals on body left";
